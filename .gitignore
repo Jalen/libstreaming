@@ -13,3 +13,11 @@ local.properties
 custom_rules.xml
 ant.properties
 *~
+
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
+/captures
