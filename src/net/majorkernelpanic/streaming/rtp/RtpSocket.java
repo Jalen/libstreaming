@@ -445,7 +445,5 @@ public class RtpSocket implements Runnable {
 			long l = (long)m-2000000;
 			return l>0 ? l : 0;
 		}
-
 	}
-
 }

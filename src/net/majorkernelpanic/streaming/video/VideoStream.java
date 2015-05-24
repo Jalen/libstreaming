@@ -512,7 +512,6 @@ public abstract class VideoStream extends MediaStream {
 		mPacketizer.start();
 
 		mStreaming = true;
-
 	}
 
 	/**
