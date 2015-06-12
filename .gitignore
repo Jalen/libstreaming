@@ -21,3 +21,5 @@ ant.properties
 .DS_Store
 /build
 /captures
+
+*.iml
