@@ -309,7 +309,9 @@ public class RtspClient {
 		mSocket = new Socket(mParameters.host, mParameters.port);
 		mBufferedReader = new BufferedReader(new InputStreamReader(mSocket.getInputStream()));
 		mOutputStream = new BufferedOutputStream(mSocket.getOutputStream());
-		sendRequestAnnounce();
+		sendRequestDescribe();
+
+//		sendRequestAnnounce();
 		sendRequestSetup();
 		sendRequestRecord();
 	}
@@ -388,6 +390,28 @@ public class RtspClient {
 
 	}
 
+	private void sendRequestDescribe() throws IllegalStateException, SocketException, IOException {
+
+		String request = "DESCRIBE rtsp://"+mParameters.host+":"+mParameters.port+"/?h264&camera=back&videoapi=mr&audioapi=mr&aac"+" RTSP/1.0\r\n" +
+				"CSeq: " + (++mCSeq) + "\r\n" +
+				"Content-Type: application/sdp \r\n\r\n";
+		Log.i(TAG,request.substring(0, request.indexOf("\r\n")));
+
+		mOutputStream.write(request.getBytes("UTF-8"));
+		mOutputStream.flush();
+		Response response = Response.parseResponse(mBufferedReader);
+
+		if (response.headers.containsKey("server")) {
+			Log.v(TAG,"RTSP server name:" + response.headers.get("server"));
+		} else {
+			Log.v(TAG,"RTSP server name unknown");
+		}
+
+		if (response.status > 299) {
+			throw new RuntimeException("Access forbidden !");
+		}
+	}
+
 	/**
 	 * Forges and sends the SETUP request 
 	 */
@@ -419,6 +443,14 @@ public class RtspClient {
 					}
 				} else {
 					stream.setOutputStream(mOutputStream, (byte)(2*i));
+				}
+
+				try {
+					Matcher m2 = Response.rexegSession.matcher(response.headers.get("session"));
+					m2.find();
+					mSessionID = m2.group(1);
+				} catch (Exception e) {
+//					throw new IOException("Invalid response from server. Session id: "+mSessionID);
 				}
 			}
 		}
