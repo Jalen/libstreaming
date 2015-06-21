@@ -392,7 +392,7 @@ public class RtspClient {
 
 	private void sendRequestDescribe() throws IllegalStateException, SocketException, IOException {
 
-		String request = "DESCRIBE rtsp://"+mParameters.host+":"+mParameters.port+"/?h264&camera=back&videoapi=mr&audioapi=mr&aac"+" RTSP/1.0\r\n" +
+		String request = "DESCRIBE rtsp://"+mParameters.host+":"+mParameters.port+"/?h264=200-20-320-240&camera=back&videoapi=mr&audioapi=mr&aac"+" RTSP/1.0\r\n" +
 				"CSeq: " + (++mCSeq) + "\r\n" +
 				"Content-Type: application/sdp \r\n\r\n";
 		Log.i(TAG,request.substring(0, request.indexOf("\r\n")));
@@ -629,6 +629,11 @@ public class RtspClient {
 				}
 			}
 			if (line==null) throw new SocketException("Connection lost");
+
+			// body
+			while ( (line = input.readLine()) != null){
+				// todo - save the data
+			}
 
 			Log.d(TAG, "Response from server: "+response.status);
 
