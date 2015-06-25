@@ -438,13 +438,12 @@ public class RtspServer extends Service {
 				mSessions.put(mSession, null);
 				mSession.syncConfigure();
 
-				String requestContent = mSession.getSessionDescription();
-				String requestAttributes =
-						"Content-Base: "+mClient.getLocalAddress().getHostAddress()+":"+mClient.getLocalPort()+"/\r\n" +
+//				String requestContent = mSession.getSessionDescription();
+				String requestAttributes = "Content-Base: "+mClient.getLocalAddress().getHostAddress()+":"+mClient.getLocalPort()+"/\r\n" +
 								"Content-Type: application/sdp\r\n";
 
 				response.attributes = requestAttributes;
-				response.content = requestContent;
+//				response.content = requestContent;
 
 				// If no exception has been thrown, we reply with OK
 				response.status = Response.STATUS_OK;
@@ -570,7 +569,6 @@ public class RtspServer extends Service {
 			}
 
 			return response;
-
 		}
 
 	}
