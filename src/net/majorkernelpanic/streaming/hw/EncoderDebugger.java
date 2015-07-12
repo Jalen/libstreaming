@@ -77,7 +77,11 @@ public class EncoderDebugger {
 	/** Framerate that will be used to test the encoder. */
 	private final static int FRAMERATE = 20;
 
-	private final static String MIME_TYPE = "video/avc";
+//	Meta 7
+//	private final static String MIME_TYPE = MediaFormat.MIMETYPE_VIDEO_MPEG2;// "video/avc";
+	private final static String MIME_TYPE = MediaFormat.MIMETYPE_VIDEO_HEVC;// "video/avc";
+//  3X Pro
+// 	private final static String MIME_TYPE = "video/avc";
 
 	private final static int NB_DECODED = 34;
 	private final static int NB_ENCODED = 50;
@@ -86,7 +90,7 @@ public class EncoderDebugger {
 	private String mDecoderName, mEncoderName, mErrorLog;
 	private MediaCodec mEncoder, mDecoder;
 	private int mWidth, mHeight, mSize;
-	private byte[] mSPS, mPPS;
+	private byte[] mSPS, mPPS; // Sequence Parameter Set (SPS) and Picture Parameter Set (PPS)
 	private byte[] mData, mInitialImage;
 	private MediaFormat mDecOutputFormat;
 	private NV21Convertor mNV21;
