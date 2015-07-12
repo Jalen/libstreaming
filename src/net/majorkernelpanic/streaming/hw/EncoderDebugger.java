@@ -233,8 +233,24 @@ public class EncoderDebugger {
 					// We now try to decode the NALs with decoders available on the phone
 					boolean decoded = false;
 					for (int k=0;k<decoders.length && !decoded;k++) {
+						mDecoderName = decoders[k].name;
+						String[] encodeNames = mEncoderName.split("\\.");
+						String[] decoderNames = mDecoderName.split("\\.");
+						if (encodeNames.length != decoderNames.length)
+							continue;
+
+						Boolean shouldBreak = false;
+						for (int index = 0; index < encodeNames.length - 1; index++)
+						{
+							if (!encodeNames[index].equalsIgnoreCase(decoderNames[index])) {
+								shouldBreak = true;
+								break;
+							}
+						}
+						if (shouldBreak)
+							continue;
+
 						for (int l=0;l<decoders[k].formats.length && !decoded;l++) {
-							mDecoderName = decoders[k].name;
 							mDecoderColorFormat = decoders[k].formats[l];
 							try {
 								configureDecoder();
@@ -342,6 +358,9 @@ public class EncoderDebugger {
 	 * or if this test has been modified.
 	 */	
 	private void saveTestResult(boolean success) {
+		if (mPreferences == null)
+			return ;
+
 		String resolution = mWidth+"x"+mHeight+"-";
 		Editor editor = mPreferences.edit();
 
@@ -693,7 +712,7 @@ public class EncoderDebugger {
 		ByteBuffer[] encInputBuffers = mEncoder.getInputBuffers();
 		ByteBuffer[] encOutputBuffers = mEncoder.getOutputBuffers();
 
-		while (elapsed<5000000) {
+		while (elapsed<50000000) {
 			// Feeds the encoder with an image
 			encInputIndex = mEncoder.dequeueInputBuffer(1000000/FRAMERATE);
 			if (encInputIndex>=0) {
@@ -739,7 +758,7 @@ public class EncoderDebugger {
 		ByteBuffer[] decOutputBuffers = mDecoder.getOutputBuffers();
 		BufferInfo info = new BufferInfo();
 
-		while (elapsed<3000000) {
+		while (elapsed<50000000) {
 
 			// Feeds the decoder with a NAL unit
 			if (i<NB_ENCODED) {
